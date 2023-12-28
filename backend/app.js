@@ -1,12 +1,13 @@
 const express = require('express');
 const openai = require('openai');
+const cors = require('cors');
 
-// Replace 'YOUR_OPENAI_API_KEY' with your actual OpenAI API key
 const apiKey = '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';
 
 const app = express();
 const port = 3000;
 
+app.use(cors()); // Enable CORS
 app.use(express.json());
 
 app.post('/api/chat', async (req, res) => {
@@ -24,14 +25,14 @@ app.post('/api/chat', async (req, res) => {
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
-      key: apiKey, // Include the API key here
+      key: apiKey,
     });
 
     const assistantMessage = response.data.choices[0].message.content;
 
     res.json({ assistantMessage });
   } catch (error) {
-    console.error(error);
+    console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
